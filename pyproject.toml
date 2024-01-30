@@ -7,9 +7,11 @@ license = "GPL-3.0-or-later"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.11"
 numpy = "^1.24.3"
 pandas = "^2.0.2"
+streamlit = "^1.26.0"
+dyce = "^0.6.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.3.1"

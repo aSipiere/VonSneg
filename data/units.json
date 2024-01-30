@@ -1,6 +1,4 @@
 {
-    "units": [
-        {"name": "Fodder", "models": 12, "movement": 6, "attacks": 1, "innaccuracy": 6, "wounds": 1, "vulnurability": 6},
-        {"name": "Brutes", "models": 6, "movement": 6, "attacks": 2, "innaccuracy": 5, "wounds": 1, "vulnurability": 5}
-    ]
+    "Fodder": {"models": 12, "movement": 6, "attacks": 1, "innaccuracy": 6, "wounds": 1, "vulnurability": 6},
+    "Brutes": {"models": 6, "movement": 6, "attacks": 2, "innaccuracy": 5, "wounds": 1, "vulnurability": 5}
 }
