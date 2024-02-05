@@ -68,7 +68,6 @@ def melee(
     )
 
     if charging_unit["wounds_taken"] == defending_unit["wounds_taken"]:
-        print("another round")
         bouts += 1
         return melee(charging_unit, defending_unit, can_shoot, bouts)
     if defending_unit["wounds_taken"] > charging_unit["wounds_taken"]:
