@@ -3,14 +3,13 @@ vonsneg.types
 ~~~~~~~~~~~~~
 typing for different units
 """
-from typing import TypedDict
+from typing import TypedDict, List
 
 
 class Unit(TypedDict):
     """
     Base Unit Class
     """
-
     name: str
     models: int
     movement: int
@@ -18,9 +17,6 @@ class Unit(TypedDict):
     innacuracy: int
     wounds: int
     vulnurability: int
+    rules: List[str]
+    type: str
 
-
-class CombatUnit(Unit):
-    """
-    Extended unit class to hold things like current wounds and panic
-    """

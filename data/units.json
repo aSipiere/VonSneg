@@ -1,4 +1,7 @@
 {
-    "Fodder": {"models": 12, "movement": 6, "attacks": 1, "innaccuracy": 6, "wounds": 1, "vulnurability": 6},
-    "Brutes": {"models": 6, "movement": 6, "attacks": 2, "innaccuracy": 5, "wounds": 1, "vulnurability": 5}
+    "Fodder": {"models": 12, "movement": 6, "attacks": 1, "innaccuracy": 6, "wounds": 1, "vulnurability": 6, "rules": ["Safety In Numbers"], "type": "Infantry"},
+    "Brutes": {"models": 6, "movement": 6, "attacks": 2, "innaccuracy": 5, "wounds": 1, "vulnurability": 5, "rules": ["Fearless"], "type": "Infantry"},
+    "Chaff": {"models": 4, "movement": 6, "attacks": 1, "innaccuracy": 5, "wounds": 1, "vulnurability": 6, "rules": ["Sharpshooters", "Vanguard", "Skirmish"], "type": "Infantry"},
+    "Whelps": {"models": 4, "movement": 12, "attacks": 2, "innaccuracy": 5, "wounds": 2, "vulnurability": 6, "rules": ["Dash"], "type": "Cavalry"},
+    "Bastards": {"models": 3, "movement": 12, "attacks": 4, "innaccuracy": 5, "wounds": 2, "vulnurability": 5, "rules": ["Bowel-Loosening Charge"], "type": "Cavalry"}
 }
