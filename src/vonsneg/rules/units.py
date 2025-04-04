@@ -11,10 +11,7 @@ class BaseUnit:
     models: int
     base_size: str
     stats: Dict[str, int]
-    ranged: bool
-    melee: bool
     traits: List[str]
-    description: str
 
     def attacks_per_model(self) -> int:
         return self.stats.get("A", 0)
