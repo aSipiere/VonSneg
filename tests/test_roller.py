@@ -1,6 +1,8 @@
-import pytest
-from vonsneg.dice.roller import Roller
 from fractions import Fraction
+
+import pytest
+
+from vonsneg.dice.roller import Roller
 
 
 def test_simulate_range():

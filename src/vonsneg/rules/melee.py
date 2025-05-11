@@ -1,5 +1,6 @@
 from collections import defaultdict
 from typing import Callable, Optional
+
 from vonsneg.dice.roller import Roller
 from vonsneg.rules.units import BaseUnit
 
@@ -62,6 +63,9 @@ class MeleeCombatSimulator:
             defender_wounds=defender.stats.get("W", 1)
         )
 
+    from functools import lru_cache
+
+    @lru_cache(maxsize=None)
     def wound_distribution(self, attacks: int, to_hit: int, to_save: int) -> dict[int, float]:
         hit_dist = Roller(attacks, to_hit).prob_dict()
         wound_dist = defaultdict(float)
@@ -75,44 +79,85 @@ class MeleeCombatSimulator:
                 wound_dist[wounds] += float(p_hit) * float(p_save)
         return dict(wound_dist)
 
+    def result_distribution(self, max_depth=6):
+        def resolve_bout(attacker_models, defender_models, depth=0, weight=1.0):
+            if attacker_models <= 0:
+                return {-1: weight}  # attacker wiped out
+            if defender_models <= 0:
+                return {1: weight}  # defender wiped out
 
-    def model_loss_distribution(self, wound_dist: dict[int, float], wounds_per_model: int) -> dict[int, float]:
-        model_dist = defaultdict(float)
-        for wounds, prob in wound_dist.items():
-            models_lost = wounds // wounds_per_model
-            model_dist[models_lost] += prob
-        return dict(model_dist)
+            atk_attacks = attacker_models * self.attacker["attacks_per_model"]
+            atk_wound_dist = self.wound_distribution(
+                atk_attacks,
+                self.attacker["to_hit"],
+                self.defender["to_save"]
+            )
 
-    def result_distribution(self) -> dict[int, float]:
-        atk_attacks = self.attacker["models"] * self.attacker["attacks_per_model"]
-        def_attacks = self.defender["models"] * self.defender["attacks_per_model"]
+            outcome_dist = defaultdict(float)
 
-        atk_wound_dist = self.wound_distribution(
-            atk_attacks,
-            self.attacker["to_hit"],
-            self.defender["to_save"]
-        )
-        def_wound_dist = self.wound_distribution(
-            def_attacks,
-            self.defender["to_hit"],
-            self.attacker["to_save"]
-        )
+            for atk_wounds, p_hit in atk_wound_dist.items():
+                def_remaining = max(defender_models - (atk_wounds // self.defender["wounds_per_model"]), 0)
+                def_attacks = def_remaining * self.defender["attacks_per_model"]
 
-        atk_model_dist = self.model_loss_distribution(atk_wound_dist, self.defender["wounds_per_model"])
-        def_model_dist = self.model_loss_distribution(def_wound_dist, self.attacker["wounds_per_model"])
+                if def_attacks == 0:
+                    outcome_dist[atk_wounds] += weight * p_hit
+                    continue
 
-        return combine_distributions(
-            atk_model_dist,
-            def_model_dist,
-            lambda atk_m, def_m: atk_m - def_m
-        )
+                def_wound_dist = self.wound_distribution(
+                    def_attacks,
+                    self.defender["to_hit"],
+                    self.attacker["to_save"]
+                )
+
+                for def_wounds, p_def in def_wound_dist.items():
+                    if weight * p_hit * p_def < 1e-12:
+                        continue
+                    total_prob = weight * p_hit * p_def
+                    atk_remaining = max(attacker_models - (def_wounds // self.attacker["wounds_per_model"]), 0)
+
+                    if def_remaining <= 0:
+                        outcome_dist[atk_wounds] += total_prob
+                    elif atk_remaining <= 0:
+                        outcome_dist[-def_wounds] += total_prob
+                    elif atk_wounds > def_wounds:
+                        delta = atk_wounds - def_wounds
+                        outcome_dist[delta] += total_prob
+                    elif def_wounds > atk_wounds:
+                        delta = def_wounds - atk_wounds
+                        outcome_dist[-delta] += total_prob
+                    else:
+                        if depth < max_depth:
+                            sub_result = resolve_bout(attacker_models, defender_models, depth + 1, total_prob)
+                            if sub_result is not None:
+                                for k, v in sub_result.items():
+                                    outcome_dist[k] += v
+                        else:
+                            outcome_dist[1] += total_prob * 0.5
+                            outcome_dist[-1] += total_prob * 0.5
+
+            return dict(outcome_dist)
+
+        return dict(resolve_bout(self.attacker["models"], self.defender["models"]))
 
     def describe(self) -> str:
         result = self.result_distribution()
-        lines = [f"Net models lost (attacker - defender):"]
+        win = sum(p for k, p in result.items() if k > 0)
+        lose = sum(p for k, p in result.items() if k < 0)
+
+        bar_width = 30
+        win_bar = int(win * bar_width)
+        lose_bar = int(lose * bar_width)
+        bar = f"{'█' * win_bar}{'▓' * lose_bar}".ljust(bar_width)
+
+        lines = ["```", "Combat Outcome:", bar,
+                 f"Win by ≥1: {win:.1%}", f"Lose by ≥1: {lose:.1%}", ""]
+
+        lines.append("Wound Delta Distribution:")
         for net in sorted(result):
-            outcome = "Draw" if net == 0 else (
-                f"Win by {net}" if net > 0 else f"Lose by {-net}"
-            )
+            if net == 0:
+                continue  # skip draws
+            outcome = f"Win by {net}" if net > 0 else f"Lose by {-net}"
             lines.append(f"{outcome:<12}: {result[net]:.2%}")
+
+        lines.append("```")
         return "\n".join(lines)

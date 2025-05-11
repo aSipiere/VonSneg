@@ -1,8 +1,10 @@
-from dataclasses import dataclass
-from typing import List, Dict
 import json
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict
+from typing import Dict, List
+
+from vonsneg.rules.weapons import BaseWeapon
+
 
 @dataclass
 class BaseUnit:
@@ -12,6 +14,9 @@ class BaseUnit:
     base_size: str
     stats: Dict[str, int]
     traits: List[str]
+    weapon: BaseWeapon
+    state: dict = field(default_factory=dict)
+
 
     def attacks_per_model(self) -> int:
         return self.stats.get("A", 0)

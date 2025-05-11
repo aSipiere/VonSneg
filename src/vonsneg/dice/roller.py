@@ -1,5 +1,7 @@
 import random
-from icepool import d6, Pool
+
+from icepool import Pool, d6
+
 
 class Roller:
     def __init__(self, num_dice: int, target: int, modifier: int = 0):
