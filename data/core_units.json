@@ -1,0 +1,105 @@
+{
+    "units": [
+      {
+        "name": "Fodder",
+        "type": "Follower",
+        "models": 12,
+        "base_size": "20mm/30mm",
+        "stats": {
+          "M": 6,
+          "A": 1,
+          "I": 6,
+          "W": 1,
+          "V": 6
+        },
+        "traits": ["Safety in Numbers"]
+      },
+      {
+        "name": "Brutes",
+        "type": "Follower",
+        "models": 6,
+        "base_size": "20mm/30mm",
+        "stats": {
+          "M": 6,
+          "A": 2,
+          "I": 5,
+          "W": 1,
+          "V": 5
+        },
+        "traits": ["Fearless"]
+      },
+      {
+        "name": "Chaff",
+        "type": "Follower",
+        "models": 4,
+        "base_size": "20mm/30mm",
+        "stats": {
+          "M": 6,
+          "A": 1,
+          "I": 5,
+          "W": 1,
+          "V": 6
+        },
+        "traits": ["Sharpshooter", "Vanguard", "Skirmish"]
+      },
+      {
+        "name": "Whelps",
+        "type": "Cavalry",
+        "models": 4,
+        "base_size": "40mm/60mm",
+        "stats": {
+          "M": 12,
+          "A": 2,
+          "I": 5,
+          "W": 2,
+          "V": 6
+        },
+        "traits": ["Dash"]
+      },
+      {
+        "name": "Bastards",
+        "type": "Cavalry",
+        "models": 3,
+        "base_size": "40mm/60mm",
+        "stats": {
+          "M": 12,
+          "A": 4,
+          "I": 5,
+          "W": 2,
+          "V": 5
+        },
+        "traits": []
+      },
+      {
+        "name": "Toff",
+        "type": "Leader",
+        "models": 1,
+        "base_size": "20mm/60mm",
+        "stats": {
+          "M": 6,
+          "A": 2,
+          "I": 5,
+          "W": 2,
+          "V": 5
+        },
+        "traits": ["Toff", "Toff Off!"]
+      },
+      {
+        "name": "Toady",
+        "type": "Leader",
+        "models": 1,
+        "base_size": "20mm/40mm",
+        "stats": {
+          "M": 6,
+          "A": 1,
+          "I": 5,
+          "W": 1,
+          "V": 5
+        },
+        "ranged": true,
+        "melee": true,
+        "traits": []
+      }
+    ]
+  }
+  
