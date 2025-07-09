@@ -31,13 +31,14 @@ class BaseUnit:
 
 def load_unit_dicts_from_json(filepath: str = "data/units.json") -> dict[str, dict]:
     """Load unit data as dictionaries (not BaseUnit objects), keyed by lowercase name."""
-    with open(Path(filepath), encoding="utf-8") as f:
+    with Path(filepath).open(encoding="utf-8") as f:
         data = json.load(f)["units"]
     return {entry["name"].lower(): entry for entry in data}
 
 
 def load_units_from_json(filepath: str = "data/units.json") -> dict[str, BaseUnit]:
-    with open(Path(filepath), encoding="utf-8") as f:
+    """Load unit data as BaseUnit objects, keyed by lowercase name."""
+    with Path(filepath).open(encoding="utf-8") as f:
         data = json.load(f)["units"]
 
     units = {}

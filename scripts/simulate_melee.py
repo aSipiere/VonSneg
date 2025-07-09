@@ -1,3 +1,4 @@
+# ruff: noqa
 from pathlib import Path
 
 from vonsneg.rules.melee import MeleeSimulator
@@ -54,7 +55,7 @@ def choose_unit(unit_dicts: dict) -> BaseUnit:
     print()
     choice = input("Enter unit name: ").strip().lower()
     if choice not in unit_dicts:
-        raise ValueError(f"Unit '{choice}' not found.")
+        raise ValueError(f"Unit '{choice}' not found")
     unit_data = unit_dicts[choice]
     weapon = choose_weapon()
     return BaseUnit(

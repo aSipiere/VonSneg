@@ -27,7 +27,7 @@ class Roller:
         return sum(1 for roll in stage2_results if roll >= 4)
 
     def distribution(self):
-        """Returns a Population object (unnormalized frequencies)."""
+        """Return a Population object (unnormalized frequencies)."""
         if self.num_dice == 0:
             # No dice: always 0 successes
             return {0: 1.0}

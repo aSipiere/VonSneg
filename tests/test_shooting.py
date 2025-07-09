@@ -1,3 +1,5 @@
+"""Tests for shooting mechanics."""
+
 import pytest
 
 from vonsneg.rules.shooting import ShootingSimulator
@@ -5,7 +7,8 @@ from vonsneg.rules.units import BaseUnit
 from vonsneg.rules.weapons import MissileWeapon
 
 
-def test_missile_weapon_with_vulnerability_modifier():
+def test_missile_weapon_with_vulnerability_modifier() -> None:
+    """Test shooting simulation with missile weapon and vulnerability modifier."""
     # Setup: Define a shooter with a Missile Weapon and a target
     shooter = BaseUnit(
         name="Shooter",
