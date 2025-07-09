@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from vonsneg.rules.melee import MeleeSimulator
+from vonsneg.rules.shooting import ShootingSimulator
 from vonsneg.rules.units import BaseUnit, load_unit_dicts_from_json
 from vonsneg.rules.weapons import (
     BaseWeapon,
@@ -72,14 +72,14 @@ def main():
     print("Loading units...")
     unit_dicts = load_unit_dicts_from_json(DATA / "core_units.json")
 
-    print("\nChoose attacker:")
-    attacker = choose_unit(unit_dicts)
+    print("\nChoose shooter:")
+    shooter = choose_unit(unit_dicts)
 
-    print("\nChoose defender:")
-    defender = choose_unit(unit_dicts)
+    print("\nChoose target:")
+    target = choose_unit(unit_dicts)
 
-    print(f"\nSimulating melee combat between {attacker.name} and {defender.name}...\n")
-    sim = MeleeSimulator(attacker, defender)
+    print(f"\nSimulating shooting between {shooter.name} and {target.name}...\n")
+    sim = ShootingSimulator(shooter, target)
     print(sim.describe())
 
     # Show some additional details
@@ -90,18 +90,11 @@ def main():
     result = sim.get_result()
     print(f"Result distribution: {result}")
 
-    # Calculate some statistics
-    expected_net_wounds = sum(wounds * prob for wounds, prob in result.items())
-    print(f"Expected net wounds: {expected_net_wounds:.2f}")
-
-    # Show win/loss breakdown
-    attacker_wins = sum(prob for wounds, prob in result.items() if wounds > 0)
-    defender_wins = sum(prob for wounds, prob in result.items() if wounds < 0)
-    draws = sum(prob for wounds, prob in result.items() if wounds == 0)
-
-    print(f"Attacker wins: {attacker_wins:.1%}")
-    print(f"Defender wins: {defender_wins:.1%}")
-    print(f"Draws: {draws:.1%}")
+    # Check if stand and shoot occurred
+    if sim._can_stand_and_shoot():
+        print(f"\nStand and shoot occurred: {target.name} could shoot back!")
+    else:
+        print(f"\nNo stand and shoot: {target.name} could not shoot back.")
 
 
 if __name__ == "__main__":

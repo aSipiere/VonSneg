@@ -1,4 +1,3 @@
-import pytest
 
 from vonsneg.rules.melee import MeleeCombatSimulator
 
@@ -21,7 +20,7 @@ def test_simulator_direct():
         defender_to_hit=4,
         defender_to_save=5,
         attacker_wounds=1,
-        defender_wounds=1
+        defender_wounds=1,
     )
     dist = sim.result_distribution()
     assert isinstance(dist, dict)
@@ -50,9 +49,7 @@ def test_describe_output():
     assert isinstance(desc, str)
     assert "Net wounds dealt" in desc
 
-import pytest
 
-from vonsneg.rules.melee import MeleeCombatSimulator
 
 
 class DummyUnit:
@@ -73,7 +70,7 @@ def test_simulator_direct():
         defender_to_hit=4,
         defender_to_save=5,
         attacker_wounds=1,
-        defender_wounds=1
+        defender_wounds=1,
     )
     dist = sim.result_distribution()
     assert isinstance(dist, dict)
